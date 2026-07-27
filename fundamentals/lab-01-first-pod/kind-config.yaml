@@ -1,0 +1,7 @@
+# Minimal kind cluster configuration — single control-plane node,
+# no worker nodes. Enough to run one Pod and explore its lifecycle.
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: lab01-first-pod
+nodes:
+  - role: control-plane
