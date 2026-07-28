@@ -1,0 +1,17 @@
+# pod-v1.yaml
+# Initial declarative version of the demo Pod.
+# This is the source of truth: whatever is written here is the
+# desired state Kubernetes will try to reach and maintain.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: declarative-demo
+  labels:
+    app: declarative-demo
+    tier: demo
+spec:
+  containers:
+    - name: nginx
+      image: nginx:1.25
+      ports:
+        - containerPort: 80

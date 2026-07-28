@@ -1,0 +1,22 @@
+# pod-v3.yaml
+# Third iteration: the image tag is bumped from 1.25 to 1.27.
+# spec.containers[*].image is one of the few fields Kubernetes allows to
+# mutate in place on an existing Pod, which makes it a convenient field
+# to demonstrate "kubectl diff" and reconciliation without deleting
+# and recreating the Pod.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: declarative-demo
+  labels:
+    app: declarative-demo
+    tier: demo
+    env: lab
+  annotations:
+    description: "Pod managed declaratively via kubectl apply - image updated to 1.27"
+spec:
+  containers:
+    - name: nginx
+      image: nginx:1.27
+      ports:
+        - containerPort: 80

@@ -1,0 +1,21 @@
+# pod-v2.yaml
+# Second iteration: same Pod, but with an extra label (env: lab) and an
+# annotation describing intent. Labels are meant to be used by selectors
+# (Services, ReplicaSets...). Annotations are metadata for humans/tools,
+# never used for selection.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: declarative-demo
+  labels:
+    app: declarative-demo
+    tier: demo
+    env: lab
+  annotations:
+    description: "Pod managed declaratively via kubectl apply"
+spec:
+  containers:
+    - name: nginx
+      image: nginx:1.25
+      ports:
+        - containerPort: 80
