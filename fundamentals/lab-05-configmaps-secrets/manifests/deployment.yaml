@@ -1,0 +1,54 @@
+# Deployment demonstrating the two injection methods for both objects:
+#   - ConfigMap  -> injected as environment variables (envFrom)
+#                -> also mounted as a volume, so each key becomes a file
+#   - Secret     -> one key injected explicitly as an env var (secretKeyRef)
+#                -> also mounted as a volume, so each key becomes a file
+#
+# busybox with `sleep infinity` is used on purpose: this lab is about
+# inspecting how config/secrets land inside the container (env + files
+# via kubectl exec), not about running a real application.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: config-secret-demo
+  labels:
+    app: config-secret-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: config-secret-demo
+  template:
+    metadata:
+      labels:
+        app: config-secret-demo
+    spec:
+      containers:
+        - name: demo
+          image: busybox:1.36
+          command: ["sh", "-c", "sleep infinity"]
+          envFrom:
+            # All ConfigMap keys become env vars: APP_NAME, APP_ENV, LOG_LEVEL
+            - configMapRef:
+                name: app-config
+          env:
+            # Explicit injection of a single Secret key as an env var
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret
+                  key: DB_PASSWORD
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/config
+              readOnly: true
+            - name: secret-volume
+              mountPath: /etc/secrets
+              readOnly: true
+      volumes:
+        - name: config-volume
+          configMap:
+            name: app-config
+        - name: secret-volume
+          secret:
+            secretName: app-secret

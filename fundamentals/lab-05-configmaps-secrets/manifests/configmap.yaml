@@ -1,0 +1,14 @@
+# ConfigMap: non-sensitive configuration for the demo app.
+# Each key here becomes:
+#   - an environment variable when injected via envFrom
+#   - a file when the ConfigMap is mounted as a volume (key name = file name)
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  labels:
+    app: config-secret-demo
+data:
+  APP_NAME: "kubernetes-labs-demo"
+  APP_ENV: "development"
+  LOG_LEVEL: "debug"
