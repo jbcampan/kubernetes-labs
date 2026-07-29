@@ -1,0 +1,19 @@
+# ClusterIP Service exposing the "web" Deployment inside the "staging" namespace.
+# Reachable from other namespaces at: web.staging.svc.cluster.local
+apiVersion: v1
+kind: Service
+metadata:
+  name: web
+  namespace: staging
+  labels:
+    app: web
+    env: staging
+spec:
+  type: ClusterIP
+  selector:
+    app: web
+    env: staging
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP

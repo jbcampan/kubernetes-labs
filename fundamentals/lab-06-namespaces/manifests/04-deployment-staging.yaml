@@ -1,0 +1,36 @@
+# Same "web" Deployment as in dev, deployed independently in "staging".
+# Same name, same labels pattern — only the namespace changes. This is
+# on purpose: it shows that namespaces let you reuse identical resource
+# names without collision.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  namespace: staging
+  labels:
+    app: web
+    env: staging
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: web
+      env: staging
+  template:
+    metadata:
+      labels:
+        app: web
+        env: staging
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.27-alpine
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi

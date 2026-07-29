@@ -1,0 +1,20 @@
+# ResourceQuota for the "dev" namespace.
+# Deliberately tighter than staging: dev is meant for quick, cheap
+# experiments, not for running many replicas.
+#
+# IMPORTANT: as soon as a ResourceQuota sets requests.cpu / requests.memory
+# or limits.cpu / limits.memory, every Pod created in this namespace MUST
+# explicitly declare resources.requests and resources.limits on all its
+# containers, otherwise the API server rejects the Pod at creation time.
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: dev-quota
+  namespace: dev
+spec:
+  hard:
+    pods: "5"
+    requests.cpu: "500m"
+    requests.memory: 256Mi
+    limits.cpu: "1"
+    limits.memory: 512Mi

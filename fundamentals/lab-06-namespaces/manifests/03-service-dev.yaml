@@ -1,0 +1,19 @@
+# ClusterIP Service exposing the "web" Deployment inside the "dev" namespace.
+# Reachable from other namespaces at: web.dev.svc.cluster.local
+apiVersion: v1
+kind: Service
+metadata:
+  name: web
+  namespace: dev
+  labels:
+    app: web
+    env: dev
+spec:
+  type: ClusterIP
+  selector:
+    app: web
+    env: dev
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP

@@ -1,0 +1,15 @@
+# ResourceQuota for the "staging" namespace.
+# Slightly more generous than dev, to illustrate that quotas are set
+# per environment based on expected workload, not copy-pasted blindly.
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: staging-quota
+  namespace: staging
+spec:
+  hard:
+    pods: "8"
+    requests.cpu: "1"
+    requests.memory: 512Mi
+    limits.cpu: "2"
+    limits.memory: 1Gi

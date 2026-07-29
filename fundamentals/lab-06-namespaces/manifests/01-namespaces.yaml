@@ -1,0 +1,18 @@
+# Two isolated namespaces simulating separate environments.
+# The "env" label is not required by Kubernetes, but it is a common
+# convention for tooling (kubectl get ns -l env=dev) and for future
+# policies (NetworkPolicy, RBAC) that will select on labels rather
+# than on the namespace name itself.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev
+  labels:
+    env: dev
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: staging
+  labels:
+    env: staging
