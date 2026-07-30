@@ -1,0 +1,46 @@
+# CronJob: creates a new Job on a recurring schedule, similar to a Unix cron
+# entry. Scheduled every minute here so results are observable quickly; in a
+# real setup the schedule would match the actual business need (nightly
+# batch, hourly report, etc.).
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: minute-report-cronjob
+  labels:
+    app: minute-report
+spec:
+  # Standard cron syntax: minute hour day-of-month month day-of-week.
+  # "*/1 * * * *" means "every minute".
+  schedule: "*/1 * * * *"
+  # What to do if the previous run's Job is still active when the next
+  # scheduled time arrives:
+  #   - Allow:   run the new Job alongside the still-running one
+  #   - Forbid:  skip the new run entirely, wait for the next schedule tick
+  #   - Replace: cancel the still-running Job and start the new one
+  concurrencyPolicy: Forbid
+  # Keep the last 3 successful Jobs and 1 failed Job around for inspection
+  # (kubectl get jobs / logs); older ones are garbage collected.
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+  # If a scheduled run is missed by more than 30s (e.g. controller was down),
+  # it's considered missed and not started late.
+  startingDeadlineSeconds: 30
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      ttlSecondsAfterFinished: 60
+      template:
+        metadata:
+          labels:
+            app: minute-report
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: reporter
+              image: busybox:1.36
+              command: ["sh", "-c"]
+              args:
+                - |
+                  echo "Generating report at $(date -u +%Y-%m-%dT%H:%M:%SZ)";
+                  sleep 3;
+                  echo "Report generation finished.";

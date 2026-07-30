@@ -1,0 +1,37 @@
+# Simple Job: runs a single fake "data processing" task to completion.
+# Unlike a Deployment, this Pod is not meant to restart forever — once the
+# script exits with code 0, the Job is marked Complete and stops creating Pods.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: data-processing-job
+  labels:
+    app: data-processing
+spec:
+  # If the container fails, Kubernetes retries up to 3 times before marking
+  # the Job as Failed.
+  backoffLimit: 3
+  # Automatically clean up the finished Pod (and the Job object) 120s after
+  # completion, so we don't have to delete it manually.
+  ttlSecondsAfterFinished: 120
+  template:
+    metadata:
+      labels:
+        app: data-processing
+    spec:
+      # A Job's Pod must NOT use restartPolicy: Always (that's for
+      # long-running workloads like Deployments). OnFailure lets Kubernetes
+      # restart the container in place on failure without recreating a new
+      # Pod each time; Never would create a brand new Pod on every retry.
+      restartPolicy: OnFailure
+      containers:
+        - name: processor
+          image: busybox:1.36
+          command: ["sh", "-c"]
+          args:
+            - |
+              echo "Starting data processing task...";
+              sleep 5;
+              echo "Processing dataset chunk...";
+              sleep 5;
+              echo "Data processing completed successfully.";

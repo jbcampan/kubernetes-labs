@@ -1,0 +1,32 @@
+# Parallel Job: illustrates running several Pods at once to share a fixed
+# amount of work, instead of processing everything sequentially.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: parallel-processing-job
+  labels:
+    app: parallel-processing
+spec:
+  # Total number of Pods that must complete successfully for the Job to be
+  # considered done.
+  completions: 6
+  # Maximum number of Pods allowed to run at the same time. Kubernetes will
+  # keep starting new Pods (up to this limit) until `completions` is reached.
+  parallelism: 3
+  backoffLimit: 4
+  ttlSecondsAfterFinished: 120
+  template:
+    metadata:
+      labels:
+        app: parallel-processing
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: worker
+          image: busybox:1.36
+          command: ["sh", "-c"]
+          args:
+            - |
+              echo "Worker starting on pod $HOSTNAME";
+              sleep $((RANDOM % 10 + 5));
+              echo "Worker finished processing its share of the work";
