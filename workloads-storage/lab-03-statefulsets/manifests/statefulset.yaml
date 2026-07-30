@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+  labels:
+    app: postgres-statefulset
+spec:
+  # Must match the headless Service name exactly -> enables
+  # <pod-name>.<serviceName>.<namespace>.svc.cluster.local DNS.
+  serviceName: postgres-headless
+  replicas: 3
+  selector:
+    matchLabels:
+      app: postgres-statefulset
+  template:
+    metadata:
+      labels:
+        app: postgres-statefulset
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:16-alpine
+          ports:
+            - containerPort: 5432
+              name: postgres
+          envFrom:
+            - secretRef:
+                name: postgres-credentials
+          env:
+            # Subdirectory required by postgres:alpine images when the
+            # mount point already contains the lost+found dir (ext4/PV).
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          volumeMounts:
+            - name: postgres-storage
+              mountPath: /var/lib/postgresql/data
+  # One PVC created PER replica (postgres-storage-postgres-0, -1, -2),
+  # unlike a Deployment where volumes are shared or ephemeral.
+  volumeClaimTemplates:
+    - metadata:
+        name: postgres-storage
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        # "standard" is the default StorageClass provisioned by kind
+        # (local-path-provisioner). No manual PV creation needed.
+        storageClassName: standard
+        resources:
+          requests:
+            storage: 1Gi
