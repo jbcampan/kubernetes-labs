@@ -1,0 +1,25 @@
+# Same idea as pod-ephemeral.yaml, but the volume now points at the PVC
+# instead of emptyDir. Data written here lives on the node's filesystem,
+# independently of this specific Pod object.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: persistent-writer
+  labels:
+    app: persistent-writer
+    lab: lab-02-persistent-volumes
+spec:
+  containers:
+    - name: writer
+      image: busybox:1.36
+      command:
+        - sh
+        - -c
+        - "echo \"Hello from $(hostname) at $(date)\" >> /data/message.txt && sleep 3600"
+      volumeMounts:
+        - name: persistent-storage
+          mountPath: /data
+  volumes:
+    - name: persistent-storage
+      persistentVolumeClaim:
+        claimName: pvc-lab02

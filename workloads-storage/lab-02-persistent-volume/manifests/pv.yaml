@@ -1,0 +1,22 @@
+# Static provisioning: this PersistentVolume is created by hand (not by a
+# StorageClass provisioner). It uses hostPath, which only makes sense in a
+# single-node lab cluster like kind — in a real multi-node cluster, hostPath
+# ties the volume to whichever node holds that directory, which is exactly
+# the kind of coupling PV/PVC are meant to abstract away in production.
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-lab02-manual
+  labels:
+    type: local
+    lab: lab-02-persistent-volumes
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /mnt/data/lab02
+    type: DirectoryOrCreate

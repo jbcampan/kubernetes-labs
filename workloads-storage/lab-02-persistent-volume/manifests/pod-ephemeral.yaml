@@ -1,0 +1,24 @@
+# Demonstrates why Pods cannot be trusted with data: the volume used here
+# (emptyDir) is tied to the Pod's lifecycle. It survives container restarts
+# within the same Pod, but is deleted the moment the Pod itself is deleted.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ephemeral-writer
+  labels:
+    app: ephemeral-writer
+    lab: lab-02-persistent-volumes
+spec:
+  containers:
+    - name: writer
+      image: busybox:1.36
+      command:
+        - sh
+        - -c
+        - "echo \"Hello from $(hostname) at $(date)\" > /data/message.txt && sleep 3600"
+      volumeMounts:
+        - name: scratch
+          mountPath: /data
+  volumes:
+    - name: scratch
+      emptyDir: {}

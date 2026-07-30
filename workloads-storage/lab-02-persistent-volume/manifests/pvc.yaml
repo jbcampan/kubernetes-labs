@@ -1,0 +1,16 @@
+# The PVC expresses a need ("500Mi, ReadWriteOnce, class manual") without
+# knowing anything about hostPath or the actual node. Kubernetes binds it to
+# pv-lab02-manual because storageClassName, accessModes, and capacity match.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-lab02
+  labels:
+    lab: lab-02-persistent-volumes
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi
