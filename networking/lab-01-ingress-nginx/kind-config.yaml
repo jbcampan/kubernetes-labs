@@ -1,0 +1,27 @@
+# kind cluster config for lab-01-ingress-nginx
+#
+# Why this file exists: by default, kind creates fully isolated nodes with no
+# port exposed on the host. An Ingress Controller needs the host's 80/443 to
+# actually reach the controller's Service inside the cluster. This config:
+#   1. Labels the control-plane node so ingress-nginx's kind manifest can
+#      schedule the controller Pod on it (nodeSelector + toleration baked
+#      into the official kind deploy.yaml).
+#   2. Maps host port 80 -> containerPort 80 and host port 443 -> 443 on
+#      that same node.
+apiVersion: kind.x-k8s.io/v1alpha4
+kind: Cluster
+nodes:
+  - role: control-plane
+    kubeadmConfigPatches:
+      - |
+        kind: InitConfiguration
+        nodeRegistration:
+          kubeletExtraArgs:
+            node-labels: "ingress-ready=true"
+    extraPortMappings:
+      - containerPort: 80
+        hostPort: 80
+        protocol: TCP
+      - containerPort: 443
+        hostPort: 443
+        protocol: TCP

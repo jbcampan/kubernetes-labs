@@ -1,0 +1,17 @@
+# ClusterIP Service in front of nginx-demo. It is NOT exposed outside the
+# cluster on its own — the Ingress Controller is the only entry point.
+# selector must match the Pod labels set in nginx-deployment.yaml.
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-demo
+  labels:
+    app: nginx-demo
+spec:
+  type: ClusterIP
+  selector:
+    app: nginx-demo
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP

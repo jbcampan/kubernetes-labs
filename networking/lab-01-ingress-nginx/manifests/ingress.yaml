@@ -1,0 +1,25 @@
+# Minimal Ingress object: describes ONE rule (route everything under "/" to
+# nginx-demo:80). It does nothing by itself — ingress-nginx (the controller
+# installed separately) is what reads this object and configures its
+# internal NGINX reverse proxy accordingly.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-demo
+  annotations:
+    # Not strictly required with a single controller in the cluster, but
+    # explicit is better: this tells ingress-nginx it owns this Ingress.
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: demo.localdev.me
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: nginx-demo
+                port:
+                  number: 80
