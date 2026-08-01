@@ -1,0 +1,4 @@
+# Locally generated self-signed certificate and key
+.certs/
+*.crt
+*.key

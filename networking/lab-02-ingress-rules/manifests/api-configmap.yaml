@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api-html
+  labels:
+    app: api
+data:
+  index.html: |
+    <html>
+      <head><title>API</title></head>
+      <body>
+        <h1>API service</h1>
+        <p>Served at path: /api (or host: api.local)</p>
+      </body>
+    </html>

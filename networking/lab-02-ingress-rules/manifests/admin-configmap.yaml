@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: admin-html
+  labels:
+    app: admin
+data:
+  index.html: |
+    <html>
+      <head><title>Admin</title></head>
+      <body>
+        <h1>Admin panel</h1>
+        <p>Served at path: /admin</p>
+      </body>
+    </html>
