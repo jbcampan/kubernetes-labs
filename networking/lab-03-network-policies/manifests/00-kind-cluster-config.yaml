@@ -1,0 +1,9 @@
+# Kind cluster config for this lab ONLY.
+# disableDefaultCNI: true removes kindnet, which does NOT enforce NetworkPolicy.
+# We install Calico manually right after cluster creation (see README Steps).
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: k8s-labs
+networking:
+  disableDefaultCNI: true
+  podSubnet: "192.168.0.0/16"

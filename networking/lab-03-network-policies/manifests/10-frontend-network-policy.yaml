@@ -1,0 +1,21 @@
+# frontend is only allowed to send traffic to backend on port 80.
+# (No ingress rule here: nothing is expected to call frontend in this lab.)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: frontend-egress-to-backend
+  namespace: netpol-demo
+spec:
+  podSelector:
+    matchLabels:
+      tier: frontend
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              tier: backend
+      ports:
+        - protocol: TCP
+          port: 80
