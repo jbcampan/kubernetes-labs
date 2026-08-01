@@ -1,0 +1,34 @@
+# values-override.yaml
+#
+# Minimal override applied on top of the podinfo chart's own values.yaml.
+# We deliberately only touch a few keys so it's easy to compare, in
+# "helm template", what came from the chart defaults vs what we changed.
+
+# Chart default is 1 replica — bump it to see multiple Pods behind the
+# same Service.
+replicaCount: 2
+
+# Chart default color is "#34577c" and message is empty. Changing both
+# makes it obvious, when we curl the app, that OUR values were applied
+# and not the chart defaults.
+ui:
+  color: "#f39c12"
+  message: "hello from lab-01-install-chart"
+
+# Chart defaults here are extremely low (cpu: 1m / memory: 16Mi limits
+# unset in some versions) — set explicit, sane requests/limits so this
+# lab also doubles as a first contact with resource management (covered
+# properly in production-readiness/lab-01-resource-management).
+resources:
+  requests:
+    cpu: 10m
+    memory: 32Mi
+  limits:
+    cpu: 100m
+    memory: 64Mi
+
+# Keep ClusterIP (default) — we reach the app with kubectl port-forward
+# in the Étapes section, no need for NodePort in this lab.
+service:
+  type: ClusterIP
+  httpPort: 9898
