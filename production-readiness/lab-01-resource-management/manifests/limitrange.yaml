@@ -1,0 +1,23 @@
+# Imposes default requests/limits on any container in this namespace
+# that doesn't declare its own `resources` block, plus hard min/max
+# bounds for containers that do declare resources.
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: default-resource-limits
+  namespace: resource-management-lab
+spec:
+  limits:
+    - type: Container
+      default:
+        cpu: "200m"
+        memory: "128Mi"
+      defaultRequest:
+        cpu: "100m"
+        memory: "64Mi"
+      min:
+        cpu: "50m"
+        memory: "16Mi"
+      max:
+        cpu: "500m"
+        memory: "256Mi"

@@ -1,0 +1,27 @@
+# No `resources` field at all.
+# This Pod gets QoS class "BestEffort": no requests, no limits.
+# It can burst freely on CPU/memory, but it's the first to be OOM-killed
+# under node memory pressure, and has no scheduling guarantee.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-no-resources
+  namespace: resource-management-lab
+  labels:
+    app: nginx-no-resources
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-no-resources
+  template:
+    metadata:
+      labels:
+        app: nginx-no-resources
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.27-alpine
+          ports:
+            - containerPort: 80
+          # Intentionally no `resources:` block here.
