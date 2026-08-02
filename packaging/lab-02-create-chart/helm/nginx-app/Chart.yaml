@@ -1,0 +1,11 @@
+apiVersion: v2
+name: nginx-app
+description: A minimal Helm chart packaging a Deployment + Service, built from scratch to understand chart internals and templating
+type: application
+
+# Chart version — bump this every time templates or values structure change
+version: 0.1.0
+
+# appVersion — the version of the application this chart deploys
+# (has no impact on Helm's own versioning, purely informational)
+appVersion: "1.27"

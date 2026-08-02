@@ -1,0 +1,14 @@
+Chart "{{ .Chart.Name }}" (release "{{ .Release.Name }}") has been deployed.
+
+Pod count: {{ .Values.replicaCount }}
+Service:   {{ include "nginx-app.fullname" . }} ({{ .Values.service.type }}, port {{ .Values.service.port }})
+
+To check the release status:
+  $ helm status {{ .Release.Name }}
+
+To list the rendered resources:
+  $ kubectl get all -l app.kubernetes.io/instance={{ .Release.Name }}
+
+To reach nginx locally:
+  $ kubectl port-forward svc/{{ include "nginx-app.fullname" . }} 8080:{{ .Values.service.port }}
+  $ curl http://localhost:8080

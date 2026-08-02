@@ -1,0 +1,19 @@
+# Default values for nginx-app.
+# This is a YAML-formatted file — override any of these with
+# --set or a custom -f values file at install time.
+
+replicaCount: 2
+
+image:
+  repository: nginx
+  tag: "1.27-alpine"
+  pullPolicy: IfNotPresent
+
+# Override the chart name used to build resource names
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 80
