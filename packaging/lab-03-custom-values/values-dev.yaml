@@ -1,0 +1,8 @@
+# Dev environment: minimal footprint, no resource constraints,
+# so it always schedules on a small local kind cluster.
+replicaCount: 1
+
+image:
+  tag: "1.27-alpine"
+
+# resources left at their empty defaults on purpose (see values.yaml)

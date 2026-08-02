@@ -1,0 +1,6 @@
+# Local kubeconfig export if you ever redirect one here
+kubeconfig
+*.kubeconfig
+
+# Any local override you keep out of git (e.g. testing with real-looking secrets)
+values-local.yaml

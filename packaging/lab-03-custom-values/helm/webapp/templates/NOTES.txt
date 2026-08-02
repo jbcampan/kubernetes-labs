@@ -1,0 +1,11 @@
+Release "{{ .Release.Name }}" deployed in namespace "{{ .Release.Namespace }}".
+
+Image      : {{ .Values.image.repository }}:{{ .Values.image.tag }}
+Replicas   : {{ .Values.replicaCount }}
+Service    : {{ include "webapp.fullname" . }} ({{ .Values.service.type }}, port {{ .Values.service.port }})
+
+To check the pods:
+  kubectl get pods -n {{ .Release.Namespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+To check the effective resources (empty in dev, set in staging/prod):
+  kubectl get deployment {{ include "webapp.fullname" . }} -n {{ .Release.Namespace }} -o jsonpath='{.spec.template.spec.containers[0].resources}'

@@ -1,0 +1,30 @@
+# Default values for webapp.
+# These are the values used when no -f / --set override is provided.
+# Environment-specific files (values-dev.yaml, values-staging.yaml,
+# values-prod.yaml) only override the keys that need to change.
+
+replicaCount: 1
+
+image:
+  repository: nginx
+  tag: "1.27-alpine"
+  pullPolicy: IfNotPresent
+
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  type: ClusterIP
+  port: 80
+
+# Left empty by default: only rendered in the Deployment if set.
+# This is what the {{ if }} conditionals in templates/deployment.yaml react to.
+resources:
+  requests:
+    cpu: ""
+    memory: ""
+  limits:
+    cpu: ""
+    memory: ""
+
+podAnnotations: {}

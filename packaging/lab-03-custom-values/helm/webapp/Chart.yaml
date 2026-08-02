@@ -1,0 +1,6 @@
+apiVersion: v2
+name: webapp
+description: A minimal, parameterizable Helm chart used to illustrate multi-environment values (dev/staging/prod)
+type: application
+version: 0.2.0
+appVersion: "1.27"
