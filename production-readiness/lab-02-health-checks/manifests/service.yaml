@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: health-checks-demo
+  labels:
+    app: health-checks-demo
+spec:
+  type: ClusterIP
+  selector:
+    app: health-checks-demo
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080

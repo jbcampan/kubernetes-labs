@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: health-checks-demo
+  labels:
+    app: health-checks-demo
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: health-checks-demo
+  template:
+    metadata:
+      labels:
+        app: health-checks-demo
+    spec:
+      containers:
+        - name: app
+          image: health-checks-demo:local
+          imagePullPolicy: IfNotPresent  # image is loaded locally into kind, never pulled from a registry
+          ports:
+            - containerPort: 8080
+          env:
+            - name: STARTUP_DELAY_SECONDS
+              value: "20"
+
+          # Protects the slow startup phase: while this fails, liveness
+          # and readiness probes are NOT evaluated at all. Gives the app
+          # up to 12 * 5s = 60s to finish starting.
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            periodSeconds: 5
+            failureThreshold: 12
+            timeoutSeconds: 2
+
+          # Once startupProbe succeeds, this takes over: if it fails
+          # 3 times in a row, the container is killed and restarted.
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            periodSeconds: 10
+            failureThreshold: 3
+            timeoutSeconds: 2
+
+          # Independent from liveness: if this fails, the Pod is removed
+          # from the Service Endpoints (no traffic sent to it), but the
+          # container itself is left running untouched.
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8080
+            periodSeconds: 5
+            failureThreshold: 2
+            timeoutSeconds: 2
