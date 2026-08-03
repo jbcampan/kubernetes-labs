@@ -1,0 +1,21 @@
+# HorizontalPodAutoscaler targeting the hpa-demo Deployment.
+# Scales between 1 and 5 replicas, aiming to keep average CPU usage
+# across pods at 50% of the requested CPU (200m -> target ~100m avg).
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hpa-demo
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: hpa-demo
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50

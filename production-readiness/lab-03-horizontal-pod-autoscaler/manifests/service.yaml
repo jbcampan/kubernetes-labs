@@ -1,0 +1,16 @@
+# ClusterIP Service exposing the hpa-demo Deployment internally.
+# The load-test script targets this Service's DNS name.
+apiVersion: v1
+kind: Service
+metadata:
+  name: hpa-demo-service
+  labels:
+    app: hpa-demo
+spec:
+  type: ClusterIP
+  selector:
+    app: hpa-demo
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
