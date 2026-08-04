@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: canary-demo-svc
+  labels:
+    app: canary-demo
+spec:
+  type: ClusterIP
+  selector:
+    app: canary-demo
+  ports:
+    - port: 80
+      targetPort: 5678
