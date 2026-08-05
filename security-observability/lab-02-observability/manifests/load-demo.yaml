@@ -1,0 +1,30 @@
+# Toy workload whose only purpose is to consume a visible, stable amount of
+# CPU so that `kubectl top pods` and the Dashboard's metrics graphs have
+# something meaningful to display.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: load-demo
+  labels:
+    app: load-demo
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: load-demo
+  template:
+    metadata:
+      labels:
+        app: load-demo
+    spec:
+      containers:
+        - name: busy-loop
+          image: busybox:1.36
+          command: ["sh", "-c", "while true; do :; done"]
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "16Mi"
+            limits:
+              cpu: "200m"
+              memory: "32Mi"

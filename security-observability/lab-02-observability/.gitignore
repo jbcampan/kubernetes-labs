@@ -1,0 +1,3 @@
+# Dashboard bearer tokens generated locally with `kubectl create token`
+dashboard-token.txt
+*.kubeconfig
