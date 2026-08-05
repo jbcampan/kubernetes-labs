@@ -1,0 +1,18 @@
+# RoleBinding: grants the permissions defined in the Role to the
+# ci-deployer ServiceAccount, but ONLY within the "rbac-demo" namespace.
+# The same ServiceAccount will have zero permissions in any other
+# namespace until a ClusterRoleBinding says otherwise.
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: ci-deployer-binding
+  namespace: rbac-demo
+subjects:
+  - kind: ServiceAccount
+    name: ci-deployer
+    namespace: rbac-demo
+roleRef:
+  kind: Role
+  name: pod-deployment-reader
+  apiGroup: rbac.authorization.k8s.io

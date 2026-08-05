@@ -1,0 +1,19 @@
+# Role: permissions are scoped to the "rbac-demo" namespace only.
+# Verbs are intentionally read-only (get/list/watch) to illustrate the
+# principle of least privilege for a technical account.
+#
+# No "create", "update", "delete" or "patch" verb is granted: this
+# ServiceAccount can observe workloads but never mutate them.
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: pod-deployment-reader
+  namespace: rbac-demo
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "list", "watch"]

@@ -1,0 +1,17 @@
+# Two namespaces are needed to demonstrate the difference in scope
+# between a Role/RoleBinding (namespace-scoped) and a
+# ClusterRole/ClusterRoleBinding (cluster-scoped).
+#
+# - rbac-demo: where the ServiceAccount lives and where the Role applies
+# - rbac-demo-other: a second namespace used only to prove that the
+#   Role does NOT grant access here, while the ClusterRole later will
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: rbac-demo
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: rbac-demo-other

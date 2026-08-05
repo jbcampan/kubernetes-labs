@@ -1,0 +1,50 @@
+# Minimal, disposable workloads. Their only purpose is to give the
+# permission tests something concrete to point at (kubectl auth can-i
+# checks a verb + resource, but it's clearer to also see it work against
+# a real object with kubectl --as=).
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample-nginx
+  namespace: rbac-demo
+  labels:
+    app: sample-nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sample-nginx
+  template:
+    metadata:
+      labels:
+        app: sample-nginx
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.27-alpine
+          ports:
+            - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample-nginx-other
+  namespace: rbac-demo-other
+  labels:
+    app: sample-nginx-other
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sample-nginx-other
+  template:
+    metadata:
+      labels:
+        app: sample-nginx-other
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.27-alpine
+          ports:
+            - containerPort: 80

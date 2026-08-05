@@ -1,0 +1,20 @@
+# ClusterRoleBinding: grants the ClusterRole's permissions to the
+# ci-deployer ServiceAccount across ALL namespaces in the cluster.
+#
+# This is intentionally applied AFTER the namespace-scoped Role/RoleBinding
+# in the lab steps, so the "before / after" kubectl auth can-i comparison
+# is visible: same ServiceAccount, permissions widen from one namespace
+# to the whole cluster (for Pods only).
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: ci-deployer-cluster-binding
+subjects:
+  - kind: ServiceAccount
+    name: ci-deployer
+    namespace: rbac-demo
+roleRef:
+  kind: ClusterRole
+  name: cluster-pod-reader
+  apiGroup: rbac.authorization.k8s.io

@@ -1,0 +1,18 @@
+# ClusterRole: a set of permissions that is NOT namespaced by itself.
+# It only becomes namespace-scoped or cluster-scoped depending on
+# whether it is bound via a RoleBinding or a ClusterRoleBinding.
+#
+# Here it only covers Pods (not Deployments), on purpose: this lets the
+# comparison test show that after binding this ClusterRole, ci-deployer
+# gains cross-namespace read access to Pods, but still cannot read
+# Deployments outside "rbac-demo" (that permission only exists in the
+# namespace-scoped Role).
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: cluster-pod-reader
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list", "watch"]
