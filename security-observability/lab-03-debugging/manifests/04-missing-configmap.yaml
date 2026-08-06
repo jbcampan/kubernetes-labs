@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: misconfigured-app
+  labels:
+    app: debug-lab
+    scenario: missing-configmap
+spec:
+  containers:
+    - name: app
+      image: nginx:1.27
+      envFrom:
+        - configMapRef:
+            name: app-config-that-does-not-exist

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: broken-image
+  labels:
+    app: debug-lab
+    scenario: image-pull-backoff
+spec:
+  containers:
+    - name: app
+      image: nginx:this-tag-does-not-exist-99
+      ports:
+        - containerPort: 80

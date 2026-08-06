@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: oversized-app
+  labels:
+    app: debug-lab
+    scenario: pending-resources
+spec:
+  containers:
+    - name: app
+      image: nginx:1.27
+      resources:
+        requests:
+          cpu: "32"
+          memory: "256Gi"
+        limits:
+          cpu: "32"
+          memory: "256Gi"
